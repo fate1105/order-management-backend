@@ -1,37 +1,35 @@
-package com.fer.ordermanagement.auth.entity;
+package com.fer.ordermanagement.product.entity;
 
-import com.fer.ordermanagement.auth.enums.UserStatus;
+import com.fer.ordermanagement.product.enums.ProductStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "products")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 60, nullable = false, unique = true)
-    private String username;
+    private String sku;
 
-    @Column(length = 120, unique = true)
-    private String email;
+    @Column(length = 160, nullable = false)
+    private String name;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal price;
 
-    @Column(name = "full_name", length = 120)
-    private String fullName;
-
-    @Column(length = 20)
-    private String phone;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus status = UserStatus.ACTIVE;
+    private ProductStatus status = ProductStatus.ACTIVE;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -42,6 +40,6 @@ public class User {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }
