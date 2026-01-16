@@ -1,3 +1,5 @@
 spring:
-  application:
-    name: order-management-backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/orders_db?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh
+    username: fer
+    password: fer123
