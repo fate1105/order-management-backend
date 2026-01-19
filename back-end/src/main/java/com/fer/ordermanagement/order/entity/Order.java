@@ -3,6 +3,9 @@ package com.fer.ordermanagement.order.entity;
 import com.fer.ordermanagement.customer.entity.Customer;
 import com.fer.ordermanagement.order.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +14,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

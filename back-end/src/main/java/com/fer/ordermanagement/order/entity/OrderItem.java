@@ -2,11 +2,18 @@ package com.fer.ordermanagement.order.entity;
 
 import com.fer.ordermanagement.product.entity.Product;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

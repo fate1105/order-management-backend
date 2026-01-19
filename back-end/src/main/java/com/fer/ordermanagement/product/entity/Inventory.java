@@ -1,12 +1,19 @@
 package com.fer.ordermanagement.product.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "inventory")
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

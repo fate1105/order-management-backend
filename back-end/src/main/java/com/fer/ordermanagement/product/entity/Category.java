@@ -2,6 +2,9 @@ package com.fer.ordermanagement.product.entity;
 
 import com.fer.ordermanagement.product.enums.CategoryStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +13,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,9 @@
 package com.fer.ordermanagement.auth.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +12,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
