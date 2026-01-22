@@ -1,6 +1,6 @@
-package com.fer.ordermanagement.product.dto;
+package com.fer.ordermanagement.category.dto;
 
-import com.fer.ordermanagement.product.enums.CategoryStatus;
+import com.fer.ordermanagement.category.enums.CategoryStatus;
 import lombok.Builder;
 import lombok.Value;
 

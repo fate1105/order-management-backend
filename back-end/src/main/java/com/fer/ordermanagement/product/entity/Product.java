@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.product.entity;
 
+import com.fer.ordermanagement.category.entity.Category;
 import com.fer.ordermanagement.product.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.Getter;

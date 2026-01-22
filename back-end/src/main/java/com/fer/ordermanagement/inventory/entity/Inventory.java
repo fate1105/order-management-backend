@@ -1,5 +1,6 @@
-package com.fer.ordermanagement.product.entity;
+package com.fer.ordermanagement.inventory.entity;
 
+import com.fer.ordermanagement.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

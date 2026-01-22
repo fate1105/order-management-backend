@@ -1,10 +1,10 @@
-package com.fer.ordermanagement.product.service;
+package com.fer.ordermanagement.category.service;
 
-import com.fer.ordermanagement.product.dto.CategoryRequest;
-import com.fer.ordermanagement.product.dto.CategoryResponse;
-import com.fer.ordermanagement.product.entity.Category;
-import com.fer.ordermanagement.product.mapper.CategoryMapper;
-import com.fer.ordermanagement.product.repository.CategoryRepository;
+import com.fer.ordermanagement.category.dto.CategoryRequest;
+import com.fer.ordermanagement.category.dto.CategoryResponse;
+import com.fer.ordermanagement.category.entity.Category;
+import com.fer.ordermanagement.category.mapper.CategoryMapper;
+import com.fer.ordermanagement.category.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,7 @@
-package com.fer.ordermanagement.product.repository;
+package com.fer.ordermanagement.category.repository;
 
-import com.fer.ordermanagement.product.entity.Category;
-import com.fer.ordermanagement.product.enums.CategoryStatus;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.fer.ordermanagement.category.entity.Category;
+import com.fer.ordermanagement.category.enums.CategoryStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.fer.ordermanagement.product.entity;
+package com.fer.ordermanagement.category.entity;
 
-import com.fer.ordermanagement.product.enums.CategoryStatus;
+import com.fer.ordermanagement.category.enums.CategoryStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "categories")

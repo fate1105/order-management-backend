@@ -1,7 +1,7 @@
-package com.fer.ordermanagement.product.mapper;
+package com.fer.ordermanagement.category.mapper;
 
-import com.fer.ordermanagement.product.dto.CategoryResponse;
-import com.fer.ordermanagement.product.entity.Category;
+import com.fer.ordermanagement.category.dto.CategoryResponse;
+import com.fer.ordermanagement.category.entity.Category;
 
 public class CategoryMapper {
     public static CategoryResponse toResponse(Category category){

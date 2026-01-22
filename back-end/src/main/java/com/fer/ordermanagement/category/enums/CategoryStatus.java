@@ -1,4 +1,4 @@
-package com.fer.ordermanagement.product.enums;
+package com.fer.ordermanagement.category.enums;
 
 public enum CategoryStatus {
     ACTIVE,

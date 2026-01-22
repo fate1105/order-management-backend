@@ -1,9 +1,8 @@
-package com.fer.ordermanagement.product.controller;
+package com.fer.ordermanagement.category.controller;
 
-import com.fer.ordermanagement.product.dto.CategoryRequest;
-import com.fer.ordermanagement.product.dto.CategoryResponse;
-import com.fer.ordermanagement.product.service.CategoryService;
-import com.fer.ordermanagement.product.service.ProductService;
+import com.fer.ordermanagement.category.dto.CategoryRequest;
+import com.fer.ordermanagement.category.dto.CategoryResponse;
+import com.fer.ordermanagement.category.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
