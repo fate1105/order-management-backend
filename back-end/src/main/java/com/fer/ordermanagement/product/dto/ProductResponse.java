@@ -1,24 +1,27 @@
 package com.fer.ordermanagement.product.dto;
 
+import com.fer.ordermanagement.product.enums.ProductStatus;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Value
+@Builder
 public class ProductResponse {
-    private Long id;
-    private String sku;
-    private String name;
-    private BigDecimal price;
-    private String description;
-    private String status;
+    Long id;
+    String sku;
+    String name;
+    BigDecimal price;
+    String description;
+    ProductStatus status;
 
-    private Long categoryId;
-    private String categoryName;
+    Long categoryId;
+    String categoryName;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

@@ -8,6 +8,7 @@ import com.fer.ordermanagement.product.entity.Product;
 import com.fer.ordermanagement.product.mapper.ProductMapper;
 import com.fer.ordermanagement.product.repository.CategoryRepository;
 import com.fer.ordermanagement.product.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -19,7 +20,12 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional
     public ProductResponse create(ProductCreateRequest request) {
+
+        if (productRepository.existsBySku(request.getSku())) {
+            throw new RuntimeException("SKU already exists: " + request.getSku());
+        }
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -37,22 +43,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse update(Long id, ProductUpdateRequest req) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
 
+        Category category = categoryRepository.findById(req.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found: " + req.getCategoryId()));
+
         product.setName(req.getName());
         product.setPrice(req.getPrice());
         product.setDescription(req.getDescription());
         product.setStatus(req.getStatus());
-
-        Category category = categoryRepository.findById(req.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found: " + req.getCategoryId()));
         product.setCategory(category);
 
-        Product saved = productRepository.save(product);
-        return ProductMapper.toResponse(saved);
+        return ProductMapper.toResponse(product);
     }
 
     @Override
