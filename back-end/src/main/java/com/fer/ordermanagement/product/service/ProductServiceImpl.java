@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.product.service;
 
+import com.fer.ordermanagement.inventory.service.InventoryService;
 import com.fer.ordermanagement.product.dto.ProductCreateRequest;
 import com.fer.ordermanagement.product.dto.ProductResponse;
 import com.fer.ordermanagement.product.dto.ProductUpdateRequest;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final InventoryService inventoryService;
 
     @Override
     @Transactional
@@ -38,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
 
         productRepository.save(product);
-
+        inventoryService.createForProduct(product);
         return ProductMapper.toResponse(product);
     }
 
@@ -68,7 +70,6 @@ public class ProductServiceImpl implements ProductService {
         return ProductMapper.toResponse(p);
     }
 
-
     @Override
     public List<ProductResponse> getAll() {
         return productRepository.findAll()
@@ -76,7 +77,6 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductMapper::toResponse)
                 .toList();
     }
-
 
     @Override
     public void delete(Long id) {
