@@ -4,14 +4,12 @@ import com.fer.ordermanagement.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
 @Getter
-@Setter
 @NoArgsConstructor
 
 public class OrderItem {
@@ -20,13 +18,13 @@ public class OrderItem {
     private Long id;
 
     @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal price;
 
     @Column(nullable = false)
-    private Integer quantity = 1;
+    private int quantity;
 
     @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal subtotal = BigDecimal.ZERO;
+    private BigDecimal subtotal;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
@@ -35,4 +33,14 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    public static OrderItem create(Order order, Product product, int quantity) {
+        OrderItem item = new OrderItem();
+        item.order = order;
+        item.product = product;
+        item.quantity = quantity;
+        item.price = product.getPrice();
+        item.subtotal = item.price.multiply(BigDecimal.valueOf(quantity));
+        return item;
+    }
 }
