@@ -1,5 +1,7 @@
 package com.fer.ordermanagement.product.service;
 
+import com.fer.ordermanagement.common.exception.ConflictException;
+import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.inventory.service.InventoryService;
 import com.fer.ordermanagement.product.dto.ProductCreateRequest;
 import com.fer.ordermanagement.product.dto.ProductResponse;
@@ -26,11 +28,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse create(ProductCreateRequest request) {
 
         if (productRepository.existsBySku(request.getSku())) {
-            throw new RuntimeException("SKU already exists: " + request.getSku());
+            throw new ConflictException("SKU already exists: " + request.getSku());
         }
 
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new NotFoundException("Category not found"));
 
         Product product = new Product();
         product.setSku(request.getSku());
@@ -49,10 +51,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse update(Long id, ProductUpdateRequest req) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Product not found: " + id));
 
         Category category = categoryRepository.findById(req.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found: " + req.getCategoryId()));
+                .orElseThrow(() -> new NotFoundException("Category not found: " + req.getCategoryId()));
 
         product.setName(req.getName());
         product.setPrice(req.getPrice());
@@ -66,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getById(Long id) {
         Product p = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Product not found: " + id));
         return ProductMapper.toResponse(p);
     }
 
@@ -81,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Product not found: " + id);
+            throw new NotFoundException("Product not found: " + id);
         }
         productRepository.deleteById(id);
     }

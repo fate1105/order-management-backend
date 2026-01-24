@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.inventory.service;
 
+import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.inventory.entity.Inventory;
 import com.fer.ordermanagement.inventory.repository.InventoryRepository;
 import com.fer.ordermanagement.product.entity.Product;
@@ -25,21 +26,21 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public void increase(Long productId, int amount){
         Inventory inventory = inventoryRepository.findByProductId(productId)
-                .orElseThrow(() -> new RuntimeException("Inventory not found for " + productId));
+                .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
         inventory.increase(amount);
     }
 
     @Override
     public void reserve(Long productId, int amount){
         Inventory inventory = inventoryRepository.findByProductId(productId)
-                .orElseThrow(() -> new RuntimeException("Inventory not found for " + productId));
+                .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
         inventory.reserve(amount);
     }
 
     @Override
     public void release(Long productId, int amount){
         Inventory inventory = inventoryRepository.findByProductId(productId)
-                .orElseThrow(() -> new RuntimeException("Inventory not found for " + productId));
+                .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
         inventory.release(amount);
     }
 }

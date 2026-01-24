@@ -5,6 +5,8 @@ import com.fer.ordermanagement.category.dto.CategoryResponse;
 import com.fer.ordermanagement.category.entity.Category;
 import com.fer.ordermanagement.category.mapper.CategoryMapper;
 import com.fer.ordermanagement.category.repository.CategoryRepository;
+import com.fer.ordermanagement.common.exception.ConflictException;
+import com.fer.ordermanagement.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public CategoryResponse create(CategoryRequest req){
         if (categoryRepository.existsByNameIgnoreCase(req.getName())){
-            throw new RuntimeException("Category name already exists!" + req.getName());
+            throw new ConflictException("Category name already exists!" + req.getName());
         }
 
         Category category = new Category();
@@ -36,10 +38,10 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public CategoryResponse update(Long id, CategoryRequest req){
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cannot found category"));
+                .orElseThrow(() -> new NotFoundException("Cannot found category"));
 
         if (categoryRepository.existsByNameIgnoreCaseAndIdNot(req.getName(), id)) {
-            throw new RuntimeException("Category name already exists!");
+            throw new ConflictException("Category name already exists!");
         }
         category.setName(req.getName());
         category.setDescription(req.getDescription());
@@ -51,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public CategoryResponse getById(Long id){
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found!"));
+                .orElseThrow(() -> new NotFoundException("Category not found!"));
         return CategoryMapper.toResponse(category);
     }
 
@@ -65,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     public void delete(Long id){
         if(!categoryRepository.existsById(id)){
-            throw new RuntimeException("Category not found!");
+            throw new NotFoundException("Category not found!");
         }
         categoryRepository.deleteById(id);
     }

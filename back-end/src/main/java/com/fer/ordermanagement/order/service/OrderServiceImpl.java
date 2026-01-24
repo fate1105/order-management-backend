@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.order.service;
 
+import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.customer.entity.Customer;
 import com.fer.ordermanagement.customer.repository.CustomerRepository;
 import com.fer.ordermanagement.inventory.service.InventoryService;
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService{
     public OrderResponse create(OrderRequest req){
         // 1. validate customer
         Customer customer = customerRepository.findById(req.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found: " + req.getCustomerId()));
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + req.getCustomerId()));
 
         // 2. create order (chưa save)
         String orderCode = generateOrderCode();
@@ -40,7 +41,7 @@ public class OrderServiceImpl implements OrderService{
 
         for (OrderItemRequest item : req.getItems()){
             Product product = productRepository.findById(item.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found: " + item.getProductId()));
+                    .orElseThrow(() -> new NotFoundException("Product not found: " + item.getProductId()));
 
             // 3.1 reserve inventory
             inventoryService.reserve(product.getId(), item.getQuantity());
@@ -62,7 +63,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public OrderResponse getById(Long orderId){
         Order order = orderRepository.findByIdWithItems(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+                .orElseThrow(() -> new NotFoundException("Order not found: " + orderId));
 
         return OrderMapper.toResponse(order);
     }
@@ -78,7 +79,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void cancel(Long orderId){
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found!"));
+                .orElseThrow(() -> new NotFoundException("Order not found!"));
 
         order.getItems().forEach(orderItem ->
                 inventoryService.release(
