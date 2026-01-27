@@ -41,13 +41,12 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(request.getDescription());
         product.setCategory(category);
 
-        productRepository.save(product);
-        inventoryService.createForProduct(product);
-        return ProductMapper.toResponse(product);
+        Product saved = productRepository.save(product);
+        inventoryService.createForProduct(saved);
+        return ProductMapper.toResponse(saved);
     }
 
     @Override
-    @Transactional
     public ProductResponse update(Long id, ProductUpdateRequest req) {
 
         Product product = productRepository.findById(id)
@@ -67,14 +66,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getById(Long id) {
-        Product p = productRepository.findById(id)
+        Product p = productRepository.findByIdWithCategory(id)
                 .orElseThrow(() -> new NotFoundException("Product not found: " + id));
         return ProductMapper.toResponse(p);
     }
 
     @Override
     public List<ProductResponse> getAll() {
-        return productRepository.findAll()
+        return productRepository.findAllWithCategory()
                 .stream()
                 .map(ProductMapper::toResponse)
                 .toList();

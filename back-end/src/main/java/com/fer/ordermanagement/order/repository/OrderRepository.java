@@ -26,4 +26,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         WHERE o.id = :id
     """)
     Optional<Order> findByIdWithItems(Long id);
+
+    boolean existsByCustomerId(Long customerId);
 }
