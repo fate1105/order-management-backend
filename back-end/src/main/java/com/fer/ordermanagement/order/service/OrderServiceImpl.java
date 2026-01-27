@@ -11,6 +11,7 @@ import com.fer.ordermanagement.order.entity.Order;
 import com.fer.ordermanagement.order.entity.OrderItem;
 import com.fer.ordermanagement.order.mapper.OrderMapper;
 import com.fer.ordermanagement.order.repository.OrderRepository;
+import com.fer.ordermanagement.payment.service.PaymentService;
 import com.fer.ordermanagement.product.entity.Product;
 import com.fer.ordermanagement.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,7 @@ public class OrderServiceImpl implements OrderService{
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
     private final InventoryService inventoryService;
+    private final PaymentService paymentService;
 
     public OrderResponse create(OrderRequest req){
         // 1. validate customer
@@ -55,7 +57,7 @@ public class OrderServiceImpl implements OrderService{
 
         // 4. save order (cascade save order_items)
         Order saved = orderRepository.save(order);
-
+        paymentService.createForOrder(saved);
         // 5. return dto
         return OrderMapper.toResponse(saved);
     }
@@ -78,17 +80,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public void cancel(Long orderId){
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException("Order not found!"));
-
-        order.getItems().forEach(orderItem ->
-                inventoryService.release(
-                        orderItem.getProduct().getId(),
-                        orderItem.getQuantity()
-                )
-        );
-
-        order.cancel();
+        paymentService.markFailed(orderId);
     }
 
     private String generateOrderCode() {
