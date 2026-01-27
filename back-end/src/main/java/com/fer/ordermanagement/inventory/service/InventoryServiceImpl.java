@@ -25,21 +25,21 @@ public class InventoryServiceImpl implements InventoryService{
 
     @Override
     public void increase(Long productId, int amount){
-        Inventory inventory = inventoryRepository.findByProductId(productId)
+        Inventory inventory = inventoryRepository.findByProductIdForUpdate(productId)
                 .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
         inventory.increase(amount);
     }
 
     @Override
     public void reserve(Long productId, int amount){
-        Inventory inventory = inventoryRepository.findByProductId(productId)
+        Inventory inventory = inventoryRepository.findByProductIdForUpdate(productId)
                 .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
         inventory.reserve(amount);
     }
 
     @Override
     public void release(Long productId, int amount){
-        Inventory inventory = inventoryRepository.findByProductId(productId)
+        Inventory inventory = inventoryRepository.findByProductIdForUpdate(productId)
                 .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
         inventory.release(amount);
     }
