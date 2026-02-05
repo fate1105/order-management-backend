@@ -27,5 +27,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     """)
     Optional<Order> findByIdWithItems(Long id);
 
+    List<Order> findByCustomerIdOrderByCreatedAtDesc(Long id);
+
     boolean existsByCustomerId(Long customerId);
 }

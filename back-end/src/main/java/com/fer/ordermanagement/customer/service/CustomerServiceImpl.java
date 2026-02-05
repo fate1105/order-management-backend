@@ -2,11 +2,13 @@ package com.fer.ordermanagement.customer.service;
 
 import com.fer.ordermanagement.common.exception.ConflictException;
 import com.fer.ordermanagement.common.exception.NotFoundException;
+import com.fer.ordermanagement.customer.dto.CustomerOrderResponse;
 import com.fer.ordermanagement.customer.dto.CustomerRequest;
 import com.fer.ordermanagement.customer.dto.CustomerResponse;
 import com.fer.ordermanagement.customer.entity.Customer;
 import com.fer.ordermanagement.customer.mapper.CustomerMapper;
 import com.fer.ordermanagement.customer.repository.CustomerRepository;
+import com.fer.ordermanagement.order.entity.Order;
 import com.fer.ordermanagement.order.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -95,5 +97,18 @@ public class CustomerServiceImpl implements CustomerService{
         }
 
         customerRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CustomerOrderResponse> getOrderHistory(Long customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new NotFoundException("Customer not found: " + customerId);
+        }
+
+        List<Order> orders = orderRepository.findByCustomerIdOrderByCreatedAtDesc(customerId);
+
+        return orders.stream()
+                .map(CustomerMapper::toOrderResponse)
+                .toList();
     }
 }

@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.customer.service;
 
+import com.fer.ordermanagement.customer.dto.CustomerOrderResponse;
 import com.fer.ordermanagement.customer.dto.CustomerRequest;
 import com.fer.ordermanagement.customer.dto.CustomerResponse;
 
@@ -11,4 +12,6 @@ public interface CustomerService {
     CustomerResponse getById(Long id);
     List<CustomerResponse> getAll();
     void delete(Long id);
+
+    List<CustomerOrderResponse> getOrderHistory(Long customerId);
 }

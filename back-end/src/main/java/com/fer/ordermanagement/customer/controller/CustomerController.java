@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.customer.controller;
 
+import com.fer.ordermanagement.customer.dto.CustomerOrderResponse;
 import com.fer.ordermanagement.customer.dto.CustomerRequest;
 import com.fer.ordermanagement.customer.dto.CustomerResponse;
 import com.fer.ordermanagement.customer.service.CustomerService;
@@ -51,5 +52,12 @@ public class CustomerController {
     ) {
         customerService.delete(customerId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<List<CustomerOrderResponse>> getOrderHistory(
+            @PathVariable("id") Long customerId
+    ) {
+        return ResponseEntity.ok(customerService.getOrderHistory(customerId));
     }
 }
