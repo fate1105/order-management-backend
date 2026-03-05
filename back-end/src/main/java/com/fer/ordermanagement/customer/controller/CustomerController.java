@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.customer.controller;
 
+import com.fer.ordermanagement.common.response.ApiResponse;
 import com.fer.ordermanagement.customer.dto.CustomerOrderResponse;
 import com.fer.ordermanagement.customer.dto.CustomerRequest;
 import com.fer.ordermanagement.customer.dto.CustomerResponse;
@@ -21,50 +22,61 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<CustomerResponse> create(
+    public ResponseEntity<ApiResponse<CustomerResponse>> create(
             @Valid @RequestBody CustomerRequest request
     ){
-        CustomerResponse customerResponse = customerService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiResponse.created(customerService.create(request))
+        );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponse> update(
+    public ResponseEntity<ApiResponse<CustomerResponse>> update(
             @PathVariable Long id,
             @Valid @RequestBody CustomerRequest request
     ){
-        return ResponseEntity.ok(customerService.update(id, request));
+        return ResponseEntity.ok(
+                ApiResponse.success(customerService.update(id, request))
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponse> getById(
+    public ResponseEntity<ApiResponse<CustomerResponse>> getById(
             @PathVariable("id") Long customerId
     ) {
-        return ResponseEntity.ok(customerService.getById(customerId));
+        return ResponseEntity.ok(
+                ApiResponse.success(customerService.getById(customerId))
+        );
     }
 
     @GetMapping
-    public ResponseEntity<Page<CustomerResponse>> getAll(
+    public ResponseEntity<ApiResponse<Page<CustomerResponse>>> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String keyword
 
     ) {
-        return ResponseEntity.ok(customerService.getAllPaged(page, size, keyword));
+        return ResponseEntity.ok(
+                ApiResponse.success(customerService.getAllPaged(page, size, keyword))
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @PathVariable("id") Long customerId
     ) {
         customerService.delete(customerId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+            ApiResponse.success("Xóa khách hàng thành công")
+        );
     }
 
     @GetMapping("/{id}/orders")
-    public ResponseEntity<List<CustomerOrderResponse>> getOrderHistory(
+    public ResponseEntity<ApiResponse<List<CustomerOrderResponse>>> getOrderHistory(
             @PathVariable("id") Long customerId
     ) {
-        return ResponseEntity.ok(customerService.getOrderHistory(customerId));
+        return ResponseEntity.ok(
+                ApiResponse.success(customerService.getOrderHistory(customerId))
+        );
     }
 }
