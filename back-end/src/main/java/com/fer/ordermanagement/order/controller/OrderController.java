@@ -38,19 +38,6 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getAll() {
-        return ResponseEntity.ok(orderService.getAll());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancel(
-            @PathVariable Long id
-    ){
-        orderService.cancel(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
     public ResponseEntity<Page<OrderResponse>> getAllPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -61,5 +48,13 @@ public class OrderController {
         return ResponseEntity.ok(
                 orderService.getAllPaged(page, size, keyword, status)
         );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancel(
+            @PathVariable Long id
+    ){
+        orderService.cancel(id);
+        return ResponseEntity.noContent().build();
     }
 }

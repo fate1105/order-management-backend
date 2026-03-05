@@ -66,7 +66,9 @@ public class ProductServiceImpl implements ProductService {
         product.setStatus(req.getStatus());
         product.setCategory(category);
 
-        return ProductMapper.toResponse(product);
+        Product saved = productRepository.save(product);
+
+        return ProductMapper.toResponse(saved);
     }
 
     @Override
