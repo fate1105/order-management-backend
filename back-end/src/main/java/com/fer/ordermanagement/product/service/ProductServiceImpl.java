@@ -8,11 +8,16 @@ import com.fer.ordermanagement.product.dto.ProductResponse;
 import com.fer.ordermanagement.product.dto.ProductUpdateRequest;
 import com.fer.ordermanagement.category.entity.Category;
 import com.fer.ordermanagement.product.entity.Product;
+import com.fer.ordermanagement.product.enums.ProductStatus;
 import com.fer.ordermanagement.product.mapper.ProductMapper;
 import com.fer.ordermanagement.category.repository.CategoryRepository;
 import com.fer.ordermanagement.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -85,5 +90,33 @@ public class ProductServiceImpl implements ProductService {
             throw new NotFoundException("Product not found: " + id);
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<ProductResponse> getAllPaged(
+            int page,
+            int size,
+            String keyword,
+            ProductStatus status
+    ) {
+        // Validate page và size
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+
+        // Chuẩn hóa keyword
+        String normalizedKeyword = (keyword == null || keyword.isBlank())
+                ? null
+                : keyword.trim();
+
+        Pageable pageable = PageRequest.of(
+                safePage,
+                safeSize,
+                Sort.by("createdAt").descending()
+        );
+
+        Page<Product> productPage =
+                productRepository.searchWithPaging(normalizedKeyword, status, pageable);
+
+        return productPage.map(ProductMapper::toResponse);
     }
 }
