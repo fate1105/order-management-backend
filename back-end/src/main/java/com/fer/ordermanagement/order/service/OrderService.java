@@ -14,8 +14,6 @@ public interface OrderService {
 
     OrderResponse getById(Long id);
 
-    List<OrderResponse> getAll();
-
     void cancel(Long id);
 
     Page<OrderResponse> getAllPaged(int page, int size, String keyword, OrderStatus status);

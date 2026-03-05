@@ -79,14 +79,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAll() {
-        return productRepository.findAllWithCategory()
-                .stream()
-                .map(ProductMapper::toResponse)
-                .toList();
-    }
-
-    @Override
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
             throw new NotFoundException("Product not found: " + id);

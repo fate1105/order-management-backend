@@ -13,7 +13,6 @@ public interface ProductService {
     ProductResponse create(ProductCreateRequest req);
     ProductResponse update(Long id, ProductUpdateRequest req);
     ProductResponse getById(Long id);
-    List<ProductResponse> getAll();
     void delete(Long id);
 
     Page<ProductResponse> getAllPaged(int page, int size, String keyword, ProductStatus status);

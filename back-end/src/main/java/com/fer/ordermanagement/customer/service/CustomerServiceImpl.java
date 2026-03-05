@@ -12,6 +12,10 @@ import com.fer.ordermanagement.order.entity.Order;
 import com.fer.ordermanagement.order.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,15 +80,6 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public List<CustomerResponse> getAll() {
-
-        return customerRepository.findAll()
-                .stream()
-                .map(CustomerMapper::toResponse)
-                .toList();
-    }
-
-    @Override
     public void delete(Long id) {
 
         if (!customerRepository.existsById(id)) {
@@ -110,5 +105,30 @@ public class CustomerServiceImpl implements CustomerService{
         return orders.stream()
                 .map(CustomerMapper::toOrderResponse)
                 .toList();
+    }
+
+    @Override
+    public Page<CustomerResponse> getAllPaged(
+            int page,
+            int size,
+            String keyword
+    ){
+        // Validate page và size
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+
+        // Chuẩn hóa keyword
+        String normalizedKeyword = (keyword == null || keyword.isBlank())
+                ? null
+                : keyword.trim();
+
+        Pageable pageable = PageRequest.of(
+                safePage,
+                safeSize,
+                Sort.by("createdAt").descending()
+        );
+
+        Page<Customer> customerPage = customerRepository.searchWithPaging(normalizedKeyword, pageable);
+        return customerPage.map(CustomerMapper::toResponse);
     }
 }

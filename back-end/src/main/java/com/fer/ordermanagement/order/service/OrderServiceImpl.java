@@ -79,14 +79,6 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderResponse> getAll(){
-        return orderRepository.findAllWithItems()
-                .stream()
-                .map(OrderMapper::toResponse)
-                .toList();
-    }
-
-    @Override
     public void cancel(Long orderId){
         paymentService.markFailed(orderId);
     }
