@@ -9,13 +9,21 @@ import com.fer.ordermanagement.order.dto.OrderRequest;
 import com.fer.ordermanagement.order.dto.OrderResponse;
 import com.fer.ordermanagement.order.entity.Order;
 import com.fer.ordermanagement.order.entity.OrderItem;
+import com.fer.ordermanagement.order.enums.OrderStatus;
 import com.fer.ordermanagement.order.mapper.OrderMapper;
 import com.fer.ordermanagement.order.repository.OrderRepository;
 import com.fer.ordermanagement.payment.service.PaymentService;
+import com.fer.ordermanagement.product.dto.ProductResponse;
 import com.fer.ordermanagement.product.entity.Product;
+import com.fer.ordermanagement.product.enums.ProductStatus;
+import com.fer.ordermanagement.product.mapper.ProductMapper;
 import com.fer.ordermanagement.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,5 +93,33 @@ public class OrderServiceImpl implements OrderService{
 
     private String generateOrderCode() {
         return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    @Override
+    public Page<OrderResponse> getAllPaged(
+            int page,
+            int size,
+            String keyword,
+            OrderStatus status
+    ) {
+        // Validate page và size
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+
+        // Chuẩn hóa keyword
+        String normalizedKeyword = (keyword == null || keyword.isBlank())
+                ? null
+                : keyword.trim();
+
+        Pageable pageable = PageRequest.of(
+                safePage,
+                safeSize,
+                Sort.by("createdAt").descending()
+        );
+
+        Page<Order> orderPage =
+                orderRepository.searchWithPaging(normalizedKeyword, status, pageable);
+
+        return orderPage.map(OrderMapper::toResponse);
     }
 }

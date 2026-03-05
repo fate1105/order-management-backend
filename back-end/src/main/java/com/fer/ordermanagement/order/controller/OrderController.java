@@ -2,9 +2,13 @@ package com.fer.ordermanagement.order.controller;
 
 import com.fer.ordermanagement.order.dto.OrderRequest;
 import com.fer.ordermanagement.order.dto.OrderResponse;
+import com.fer.ordermanagement.order.enums.OrderStatus;
 import com.fer.ordermanagement.order.service.OrderService;
+import com.fer.ordermanagement.product.dto.ProductResponse;
+import com.fer.ordermanagement.product.enums.ProductStatus;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +48,18 @@ public class OrderController {
     ){
         orderService.cancel(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<OrderResponse>> getAllPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) OrderStatus status
+    ) {
+
+        return ResponseEntity.ok(
+                orderService.getAllPaged(page, size, keyword, status)
+        );
     }
 }
