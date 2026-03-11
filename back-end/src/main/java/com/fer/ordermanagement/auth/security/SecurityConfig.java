@@ -1,4 +1,4 @@
-package com.fer.ordermanagement.security;
+package com.fer.ordermanagement.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

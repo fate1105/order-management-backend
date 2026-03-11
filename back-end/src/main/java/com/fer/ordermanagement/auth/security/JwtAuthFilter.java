@@ -1,4 +1,4 @@
-package com.fer.ordermanagement.security;
+package com.fer.ordermanagement.auth.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

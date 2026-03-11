@@ -1,4 +1,4 @@
-package com.fer.ordermanagement.security;
+package com.fer.ordermanagement.auth.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

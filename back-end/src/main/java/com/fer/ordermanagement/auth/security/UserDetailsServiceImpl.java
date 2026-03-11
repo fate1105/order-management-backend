@@ -1,4 +1,4 @@
-package com.fer.ordermanagement.security;
+package com.fer.ordermanagement.auth.security;
 
 import com.fer.ordermanagement.auth.entity.User;
 import com.fer.ordermanagement.auth.enums.UserStatus;
