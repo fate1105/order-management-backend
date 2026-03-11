@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.auth.entity;
 
+import com.fer.ordermanagement.auth.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private RoleName name;
 
     @Column(length = 255)
     private String description;
