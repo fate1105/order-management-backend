@@ -2,6 +2,9 @@ package com.fer.ordermanagement.common.exception;
 
 import com.fer.ordermanagement.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +59,30 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleOther(Exception ex) {
         return ResponseEntity.status(500).body(
                 ApiResponse.error(500, "Internal server error")
+        );
+    }
+
+    // 401 - sai password
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
+        return ResponseEntity.status(401).body(
+                ApiResponse.error(401, "Invalid username or password")
+        );
+    }
+
+    // 401 - user bị ban/inactive
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDisabled(DisabledException ex) {
+        return ResponseEntity.status(401).body(
+                ApiResponse.error(401, "Account is not active")
+        );
+    }
+
+    // 403 - không có quyền
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
+        return ResponseEntity.status(403).body(
+                ApiResponse.error(403, "Access denied")
         );
     }
 }
