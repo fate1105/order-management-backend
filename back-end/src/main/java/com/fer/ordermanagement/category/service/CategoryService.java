@@ -2,6 +2,7 @@ package com.fer.ordermanagement.category.service;
 
 import com.fer.ordermanagement.category.dto.CategoryRequest;
 import com.fer.ordermanagement.category.dto.CategoryResponse;
+import com.fer.ordermanagement.category.entity.Category;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface CategoryService {
     CategoryResponse getById(Long id);
     List<CategoryResponse> getAll();
     void delete(Long id);
+    Category findById(Long id);
 }

@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public CategoryResponse update(Long id, CategoryRequest req){
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Cannot found category"));
+                .orElseThrow(() -> new NotFoundException("Category not found:" + id));
 
         if (categoryRepository.existsByNameIgnoreCaseAndIdNot(req.getName(), id)) {
             throw new ConflictException("Category name already exists!");
@@ -47,13 +47,14 @@ public class CategoryServiceImpl implements CategoryService{
         category.setDescription(req.getDescription());
         category.setStatus(req.getStatus());
 
+        categoryRepository.save(category);
         return CategoryMapper.toResponse(category);
     }
 
     @Override
     public CategoryResponse getById(Long id){
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category not found!"));
+                .orElseThrow(() -> new NotFoundException("Category not found:" + id));
         return CategoryMapper.toResponse(category);
     }
 
@@ -67,8 +68,14 @@ public class CategoryServiceImpl implements CategoryService{
 
     public void delete(Long id){
         if(!categoryRepository.existsById(id)){
-            throw new NotFoundException("Category not found!");
+            throw new NotFoundException("Category not found:" + id);
         }
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Category findById(Long id){
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category not found:" + id));
     }
 }

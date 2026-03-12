@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.product.service;
 
+import com.fer.ordermanagement.category.service.CategoryService;
 import com.fer.ordermanagement.common.exception.ConflictException;
 import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.inventory.service.InventoryService;
@@ -10,7 +11,6 @@ import com.fer.ordermanagement.category.entity.Category;
 import com.fer.ordermanagement.product.entity.Product;
 import com.fer.ordermanagement.product.enums.ProductStatus;
 import com.fer.ordermanagement.product.mapper.ProductMapper;
-import com.fer.ordermanagement.category.repository.CategoryRepository;
 import com.fer.ordermanagement.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final InventoryService inventoryService;
 
     @Override
@@ -38,8 +38,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ConflictException("SKU already exists: " + request.getSku());
         }
 
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new NotFoundException("Category not found"));
+        Category category = categoryService.findById(request.getCategoryId());
 
         Product product = new Product();
         product.setSku(request.getSku());
@@ -54,13 +53,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponse update(Long id, ProductUpdateRequest req) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product not found: " + id));
 
-        Category category = categoryRepository.findById(req.getCategoryId())
-                .orElseThrow(() -> new NotFoundException("Category not found: " + req.getCategoryId()));
+        Category category = categoryService.findById(req.getCategoryId());
 
         product.setName(req.getName());
         product.setPrice(req.getPrice());
