@@ -80,6 +80,12 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public Customer getCustomerEntityById(Long customerId) {
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + customerId));
+    }
+
+    @Override
     public void delete(Long id) {
 
         if (!customerRepository.existsById(id)) {

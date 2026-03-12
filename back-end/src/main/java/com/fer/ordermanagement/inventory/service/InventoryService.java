@@ -10,4 +10,6 @@ public interface InventoryService {
     void reserve(Long productId, int amount);
 
     void release(Long productId, int amount);
+
+    void restore(Long productId, int amount);
 }

@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findBySku(String sku);
     boolean existsBySku(String sku);
-    List<Product> findByStatus(ProductStatus status);
-    List<Product> findByNameContainingIgnoreCase(String name);
 
     @Query("""
         SELECT p FROM Product p
@@ -59,4 +56,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("status") ProductStatus status,
             Pageable pageable
     );
+    @Query("""
+        SELECT p FROM Product p
+        JOIN FETCH p.category
+        WHERE p.id IN :ids
+    """)
+    List<Product> findAllByIdIn(@Param("ids") List<Long> ids);
 }

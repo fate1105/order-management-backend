@@ -19,6 +19,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -76,6 +78,14 @@ public class ProductServiceImpl implements ProductService {
         Product p = productRepository.findByIdWithCategory(id)
                 .orElseThrow(() -> new NotFoundException("Product not found: " + id));
         return ProductMapper.toResponse(p);
+    }
+
+    @Override
+    public List<Product> getProductsByIds(List<Long> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return productRepository.findAllByIdIn(productIds);
     }
 
     @Override

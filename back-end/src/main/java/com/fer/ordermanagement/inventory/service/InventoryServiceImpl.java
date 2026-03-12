@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class InventoryServiceImpl implements InventoryService{
+public class InventoryServiceImpl implements InventoryService {
+
     private final InventoryRepository inventoryRepository;
 
     @Override
-    public void createForProduct(Product product){
-        if(inventoryRepository.existsByProductId(product.getId())){
+    public void createForProduct(Product product) {
+        if (inventoryRepository.existsByProductId(product.getId())) {
             return;
         }
         Inventory inventory = Inventory.create(product);
@@ -24,23 +25,27 @@ public class InventoryServiceImpl implements InventoryService{
     }
 
     @Override
-    public void increase(Long productId, int amount){
-        Inventory inventory = inventoryRepository.findByProductIdForUpdate(productId)
-                .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
-        inventory.increase(amount);
+    public void increase(Long productId, int amount) {
+        getInventoryForUpdate(productId).increase(amount);
     }
 
     @Override
-    public void reserve(Long productId, int amount){
-        Inventory inventory = inventoryRepository.findByProductIdForUpdate(productId)
-                .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
-        inventory.reserve(amount);
+    public void reserve(Long productId, int amount) {
+        getInventoryForUpdate(productId).reserve(amount);
     }
 
     @Override
-    public void release(Long productId, int amount){
-        Inventory inventory = inventoryRepository.findByProductIdForUpdate(productId)
-                .orElseThrow(() -> new NotFoundException("Inventory not found for " + productId));
-        inventory.release(amount);
+    public void release(Long productId, int amount) {
+        getInventoryForUpdate(productId).release(amount);
+    }
+
+    @Override
+    public void restore(Long productId, int amount) {
+        getInventoryForUpdate(productId).restore(amount);
+    }
+
+    private Inventory getInventoryForUpdate(Long productId) {
+        return inventoryRepository.findByProductIdForUpdate(productId)
+                .orElseThrow(() -> new NotFoundException("Inventory not found for product: " + productId));
     }
 }

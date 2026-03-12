@@ -62,6 +62,11 @@ public class Inventory {
         this.reservedQuantity -= amount;
     }
 
+    public void restore(int amount) {
+        if (amount <= 0) throw new IllegalArgumentException("Amount must be > 0");
+        this.quantity += amount;
+    }
+
     public int getAvailable() {
         return quantity - reservedQuantity;
     }

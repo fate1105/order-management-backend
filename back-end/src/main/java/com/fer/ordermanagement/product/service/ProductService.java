@@ -3,6 +3,7 @@ package com.fer.ordermanagement.product.service;
 import com.fer.ordermanagement.product.dto.ProductCreateRequest;
 import com.fer.ordermanagement.product.dto.ProductResponse;
 import com.fer.ordermanagement.product.dto.ProductUpdateRequest;
+import com.fer.ordermanagement.product.entity.Product;
 import com.fer.ordermanagement.product.enums.ProductStatus;
 import org.springframework.data.domain.Page;
 
@@ -13,6 +14,6 @@ public interface ProductService {
     ProductResponse update(Long id, ProductUpdateRequest req);
     ProductResponse getById(Long id);
     void delete(Long id);
-
+    List<Product> getProductsByIds(List<Long> productIds);
     Page<ProductResponse> getAllPaged(int page, int size, String keyword, ProductStatus status);
 }
