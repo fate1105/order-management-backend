@@ -19,7 +19,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
         FROM Customer c 
         WHERE
             (:keyword IS NULL OR
-                LOWER(c.fullname) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                LOWER(c.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                 LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                 LOWER(c.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                 LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
@@ -30,7 +30,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
         FROM Customer c
         WHERE
             (:keyword IS NULL OR
-                LOWER(c.fullname) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                LOWER(c.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                 LOWER(c.phone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                 LOWER(c.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                 LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%'))

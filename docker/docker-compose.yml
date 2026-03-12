@@ -1,21 +1,52 @@
 version: "3.9"
 
 services:
+
   mysql:
     image: mysql:8.0
     container_name: fer-mysql
     restart: unless-stopped
+
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: orders_db
-      MYSQL_USER: fer
-      MYSQL_PASSWORD: fer123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TZ: Asia/Ho_Chi_Minh
+
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
+
     volumes:
       - ../db:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  app:
+    build: ../back-end
+    container_name: fer-app
+    restart: unless-stopped
+
+    ports:
+      - "${APP_PORT}:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+
+    depends_on:
+      mysql:
+        condition: service_healthy
 
 volumes:
   mysql_data:
