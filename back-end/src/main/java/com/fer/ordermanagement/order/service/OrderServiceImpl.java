@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.CANCELLED);
 
         for(OrderItem item : order.getItems()) {
-            inventoryService.restore(item.getProduct().getId(), item.getQuantity());
+            inventoryService.release(item.getProduct().getId(), item.getQuantity());
         }
 
         paymentService.markFailed(orderId);

@@ -39,11 +39,6 @@ public class InventoryServiceImpl implements InventoryService {
         getInventoryForUpdate(productId).release(amount);
     }
 
-    @Override
-    public void restore(Long productId, int amount) {
-        getInventoryForUpdate(productId).restore(amount);
-    }
-
     private Inventory getInventoryForUpdate(Long productId) {
         return inventoryRepository.findByProductIdForUpdate(productId)
                 .orElseThrow(() -> new NotFoundException("Inventory not found for product: " + productId));

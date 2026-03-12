@@ -54,6 +54,20 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Void>> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(400).body(
+                ApiResponse.error(400, ex.getMessage())
+        );
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<Void>> handleIllegalState(IllegalStateException ex) {
+        return ResponseEntity.status(400).body(
+                ApiResponse.error(400, ex.getMessage())
+        );
+    }
+
     //500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleOther(Exception ex) {

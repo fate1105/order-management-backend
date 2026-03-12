@@ -62,9 +62,15 @@ public class Inventory {
         this.reservedQuantity -= amount;
     }
 
-    public void restore(int amount) {
+    public void fulfill(int amount) {
         if (amount <= 0) throw new IllegalArgumentException("Amount must be > 0");
-        this.quantity += amount;
+        if (this.reservedQuantity < amount) {
+            throw new IllegalStateException("Cannot fulfill more than reserved");
+        }
+        // Trừ số lượng vật lý vì đã giao cho shipper
+        this.quantity -= amount;
+        // Trừ số lượng giữ chỗ vì đơn đã xong
+        this.reservedQuantity -= amount;
     }
 
     public int getAvailable() {
