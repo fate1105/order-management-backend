@@ -1,10 +1,11 @@
 package com.fer.ordermanagement.customer.controller;
 
 import com.fer.ordermanagement.common.response.ApiResponse;
-import com.fer.ordermanagement.customer.dto.CustomerOrderResponse;
 import com.fer.ordermanagement.customer.dto.CustomerRequest;
 import com.fer.ordermanagement.customer.dto.CustomerResponse;
 import com.fer.ordermanagement.customer.service.CustomerService;
+import com.fer.ordermanagement.order.dto.OrderResponse;
+import com.fer.ordermanagement.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
+    private final OrderService orderService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<CustomerResponse>> create(
@@ -72,11 +74,11 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}/orders")
-    public ResponseEntity<ApiResponse<List<CustomerOrderResponse>>> getOrderHistory(
+    public ResponseEntity<ApiResponse<List<OrderResponse>>> getOrderHistory(
             @PathVariable("id") Long customerId
     ) {
         return ResponseEntity.ok(
-                ApiResponse.success(customerService.getOrderHistory(customerId))
+                ApiResponse.success(orderService.getOrdersByCustomerId(customerId))
         );
     }
 }

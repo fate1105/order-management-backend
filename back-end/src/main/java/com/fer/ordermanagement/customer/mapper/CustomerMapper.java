@@ -19,16 +19,4 @@ public final class CustomerMapper {
                 .address(customer.getAddress())
                 .build();
     }
-
-    public static CustomerOrderResponse toOrderResponse(Order order){
-        if (order == null) return null;
-
-        return CustomerOrderResponse.builder()
-                .orderId(order.getId())
-                .orderCode(order.getOrderCode())
-                .status(order.getStatus())
-                .totalAmount(order.getTotalAmount())
-                .createdAt(order.getCreatedAt())
-                .build();
-    }
 }

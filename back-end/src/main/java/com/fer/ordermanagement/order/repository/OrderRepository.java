@@ -30,9 +30,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     """)
     Optional<Order> findByIdWithItems(Long id);
 
-    List<Order> findByCustomerIdOrderByCreatedAtDesc(Long id);
-
-    boolean existsByCustomerId(Long customerId);
+    @Query("""
+        SELECT DISTINCT o
+        FROM Order o
+        JOIN FETCH o.items i
+        JOIN FETCH i.product
+        WHERE o.customer.id = :customerId
+        ORDER BY o.createdAt DESC
+    """)
+    List<Order> findByCustomerIdOrderByCreatedAtDesc(@Param("customerId") Long customerId);
 
     @Query(value = """
         SELECT DISTINCT o
@@ -57,4 +63,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             @Param("status") OrderStatus status,
             Pageable pageable
     );
+
+    boolean existsByCustomerId(Long id);
 }

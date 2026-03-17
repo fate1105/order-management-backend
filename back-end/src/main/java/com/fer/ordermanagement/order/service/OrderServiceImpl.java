@@ -35,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    // ✅ Đã thay thế Repository bằng Service của các module khác
     private final ProductService productService;
     private final CustomerService customerService;
     private final InventoryService inventoryService;
@@ -95,6 +94,17 @@ public class OrderServiceImpl implements OrderService {
         paymentService.markFailed(orderId);
 
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderResponse> getOrdersByCustomerId(Long customerId) {
+        customerService.getCustomerEntityById(customerId);
+
+        List<Order> orders = orderRepository.findByCustomerIdOrderByCreatedAtDesc(customerId);
+
+        return orders.stream()
+                .map(OrderMapper::toResponse)
+                .toList();
     }
 
     private String generateOrderCode() {
