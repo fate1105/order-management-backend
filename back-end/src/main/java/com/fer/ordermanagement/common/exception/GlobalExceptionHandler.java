@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -68,14 +70,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    //500
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleOther(Exception ex) {
-        return ResponseEntity.status(500).body(
-                ApiResponse.error(500, "Internal server error")
-        );
-    }
-
     // 401 - sai password
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
@@ -97,6 +91,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity.status(403).body(
                 ApiResponse.error(403, "Access denied")
+        );
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<Void>> handleRuntime(RuntimeException ex) {
+        log.error("Runtime exception: ", ex);
+        return ResponseEntity.status(500).body(
+                ApiResponse.error(500, ex.getMessage())  // trả message thật vì đây là lỗi mình tự throw
+        );
+    }
+
+    //500
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleOther(Exception ex) {
+        log.error("Unhandled exception: ", ex);
+        return ResponseEntity.status(500).body(
+                ApiResponse.error(500, "Internal server error")
         );
     }
 }

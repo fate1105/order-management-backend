@@ -59,7 +59,7 @@ public class AuthService {
             throw new RuntimeException("Email already exists");
         }
 
-        Role role = roleRepository.findByName(RoleName.ROLE_CUSTOMER)
+        Role role = roleRepository.findByName(RoleName.STAFF)
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
 
         User user = User.builder()
