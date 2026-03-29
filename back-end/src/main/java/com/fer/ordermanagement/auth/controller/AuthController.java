@@ -4,7 +4,7 @@ import com.fer.ordermanagement.auth.dto.AuthResponse;
 import com.fer.ordermanagement.auth.dto.LoginRequest;
 import com.fer.ordermanagement.auth.dto.RegisterRequest;
 import com.fer.ordermanagement.auth.service.AuthService;
-import com.fer.ordermanagement.common.response.ApiResponse;
+import com.fer.ordermanagement.common.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +21,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<BaseResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(BaseResponse.success(response));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<BaseResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest request) {
         AuthResponse response = authService.register(request);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return ResponseEntity.ok(BaseResponse.success(response));
     }
 }

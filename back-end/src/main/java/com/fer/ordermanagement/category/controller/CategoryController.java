@@ -3,7 +3,7 @@ package com.fer.ordermanagement.category.controller;
 import com.fer.ordermanagement.category.dto.CategoryRequest;
 import com.fer.ordermanagement.category.dto.CategoryResponse;
 import com.fer.ordermanagement.category.service.CategoryService;
-import com.fer.ordermanagement.common.response.ApiResponse;
+import com.fer.ordermanagement.common.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,45 +20,45 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponse>> create(
+    public ResponseEntity<BaseResponse<CategoryResponse>> create(
             @Valid @RequestBody CategoryRequest req
     ){
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.created(categoryService.create(req))
+                BaseResponse.created(categoryService.create(req))
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<CategoryResponse>> update(
+    public ResponseEntity<BaseResponse<CategoryResponse>> update(
             @PathVariable Long id,
             @Valid @RequestBody CategoryRequest req
     ){
         return ResponseEntity.ok(
-                ApiResponse.success(categoryService.update(id, req))
+                BaseResponse.success(categoryService.update(id, req))
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CategoryResponse>> getById(
+    public ResponseEntity<BaseResponse<CategoryResponse>> getById(
             @PathVariable Long id
     ){
         return ResponseEntity.ok(
-            ApiResponse.success(categoryService.getById(id))
+            BaseResponse.success(categoryService.getById(id))
         );
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAll(){
+    public ResponseEntity<BaseResponse<List<CategoryResponse>>> getAll(){
         return ResponseEntity.ok(
-                ApiResponse.success(categoryService.getAll())
+                BaseResponse.success(categoryService.getAll())
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id){
+    public ResponseEntity<BaseResponse<Void>> delete(@PathVariable Long id){
         categoryService.delete(id);
         return ResponseEntity.ok(
-                ApiResponse.success("Xóa danh mục sản phẩm thành công")
+                BaseResponse.success("Xóa danh mục sản phẩm thành công")
         );
     }
 }

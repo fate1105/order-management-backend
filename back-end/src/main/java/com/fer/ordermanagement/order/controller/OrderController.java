@@ -1,6 +1,6 @@
 package com.fer.ordermanagement.order.controller;
 
-import com.fer.ordermanagement.common.response.ApiResponse;
+import com.fer.ordermanagement.common.response.BaseResponse;
 import com.fer.ordermanagement.common.response.PageResponse;
 import com.fer.ordermanagement.order.dto.OrderRequest;
 import com.fer.ordermanagement.order.dto.OrderResponse;
@@ -21,25 +21,25 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<OrderResponse>> create(
+    public ResponseEntity<BaseResponse<OrderResponse>> create(
             @Valid @RequestBody OrderRequest req
     ){
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.created(orderService.create(req))
+                BaseResponse.created(orderService.create(req))
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<OrderResponse>> getById(
+    public ResponseEntity<BaseResponse<OrderResponse>> getById(
             @PathVariable Long id
     ){
         return ResponseEntity.ok(
-                ApiResponse.success(orderService.getById(id))
+                BaseResponse.success(orderService.getById(id))
         );
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<OrderResponse>>> getAllPaged(
+    public ResponseEntity<BaseResponse<PageResponse<OrderResponse>>> getAllPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String keyword,
@@ -48,17 +48,17 @@ public class OrderController {
 
         Page<OrderResponse> result = orderService.getAllPaged(page, size, keyword, status);
         return ResponseEntity.ok(
-                ApiResponse.success(new PageResponse<>(result))
+                BaseResponse.success(new PageResponse<>(result))
         );
     }
 
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<ApiResponse<Void>> cancel(
+    public ResponseEntity<BaseResponse<Void>> cancel(
             @PathVariable Long id
     ){
         orderService.cancel(id);
         return ResponseEntity.ok(
-                ApiResponse.success("Hủy đơn hàng thành công")
+                BaseResponse.success("Hủy đơn hàng thành công")
         );
     }
 }

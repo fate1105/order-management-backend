@@ -1,6 +1,6 @@
 package com.fer.ordermanagement.payment.controller;
 
-import com.fer.ordermanagement.common.response.ApiResponse;
+import com.fer.ordermanagement.common.response.BaseResponse;
 import com.fer.ordermanagement.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +16,22 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/{orderId}/success")
-    public ResponseEntity<ApiResponse<Void>> paySuccess(
+    public ResponseEntity<BaseResponse<Void>> paySuccess(
             @PathVariable Long orderId
     ) {
         paymentService.markSuccess(orderId);
         return ResponseEntity.ok(
-                ApiResponse.success("Thanh toán thành công")
+                BaseResponse.success("Thanh toán thành công")
         );
     }
 
     @PostMapping("/{orderId}/fail")
-    public ResponseEntity<ApiResponse<Void>> payFailed(
+    public ResponseEntity<BaseResponse<Void>> payFailed(
             @PathVariable Long orderId
     ) {
         paymentService.markFailed(orderId);
         return ResponseEntity.ok(
-                ApiResponse.success("Thanh toán thất bại")
+                BaseResponse.success("Thanh toán thất bại")
         );
     }
 }
