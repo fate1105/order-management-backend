@@ -10,9 +10,15 @@ spring:
       ddl-auto: none
     show-sql: true
 
+google:
+  gemini:
+    api:
+      key: ${GOOGLE_GEMINI_API_KEY}
+      model: gemini-2.5-flash
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
+
 
 springdoc:
   api-docs:
