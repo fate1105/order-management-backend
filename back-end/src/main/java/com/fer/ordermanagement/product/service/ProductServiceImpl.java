@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.product.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.category.service.CategoryService;
 import com.fer.ordermanagement.common.exception.ConflictException;
 import com.fer.ordermanagement.common.exception.NotFoundException;
@@ -29,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final InventoryService inventoryService;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -49,6 +51,9 @@ public class ProductServiceImpl implements ProductService {
 
         Product saved = productRepository.save(product);
         inventoryService.createForProduct(saved);
+
+        auditLogService.log("CREATE", "PRODUCT", saved.getId());
+
         return ProductMapper.toResponse(saved);
     }
 
@@ -69,6 +74,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product saved = productRepository.save(product);
 
+        auditLogService.log("UPDATE", "PRODUCT", saved.getId());
         return ProductMapper.toResponse(saved);
     }
 
@@ -93,6 +99,7 @@ public class ProductServiceImpl implements ProductService {
             throw new NotFoundException("Product not found: " + id);
         }
         productRepository.deleteById(id);
+        auditLogService.log("DELETE", "PRODUCT", id);
     }
 
     @Override

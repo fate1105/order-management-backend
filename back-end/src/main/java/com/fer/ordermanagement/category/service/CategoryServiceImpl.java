@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.category.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.category.dto.CategoryRequest;
 import com.fer.ordermanagement.category.dto.CategoryResponse;
 import com.fer.ordermanagement.category.entity.Category;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
     private final CategoryRepository categoryRepository;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -31,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService{
         category.setStatus(req.getStatus());
 
         categoryRepository.save(category);
+        auditLogService.log("CREATE", "CATEGORY", category.getId());
         return CategoryMapper.toResponse(category);
     }
 
@@ -48,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService{
         category.setStatus(req.getStatus());
 
         categoryRepository.save(category);
+        auditLogService.log("UPDATE", "CATEGORY", id);
         return CategoryMapper.toResponse(category);
     }
 
@@ -71,6 +75,7 @@ public class CategoryServiceImpl implements CategoryService{
             throw new NotFoundException("Category not found:" + id);
         }
         categoryRepository.deleteById(id);
+        auditLogService.log("DELETE", "CATEGORY", id);
     }
 
     @Override

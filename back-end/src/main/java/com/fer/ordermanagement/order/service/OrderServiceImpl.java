@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.order.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.customer.entity.Customer;
 import com.fer.ordermanagement.customer.service.CustomerService;
@@ -39,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final InventoryService inventoryService;
     private final PaymentService paymentService;
+    private final AuditLogService auditLogService;
 
     @Override
     public OrderResponse create(OrderRequest req) {
@@ -69,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
         Order saved = orderRepository.save(order);
         paymentService.createForOrder(saved);
 
+        auditLogService.log("CREATE", "ORDER", saved.getId());
         return OrderMapper.toResponse(saved);
     }
 
@@ -94,6 +97,7 @@ public class OrderServiceImpl implements OrderService {
         paymentService.markFailed(orderId);
 
         orderRepository.save(order);
+        auditLogService.log("CANCEL", "ORDER", orderId);
     }
 
     @Override

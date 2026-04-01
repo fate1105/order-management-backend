@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.auth.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.auth.dto.AuthResponse;
 import com.fer.ordermanagement.auth.dto.LoginRequest;
 import com.fer.ordermanagement.auth.dto.RegisterRequest;
@@ -9,6 +10,7 @@ import com.fer.ordermanagement.auth.enums.RoleName;
 import com.fer.ordermanagement.auth.repository.RoleRepository;
 import com.fer.ordermanagement.auth.repository.UserRepository;
 import com.fer.ordermanagement.auth.security.JwtUtil;
+import com.fer.ordermanagement.auth.security.UserDetailsImpl;
 import com.fer.ordermanagement.auth.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final AuditLogService auditLogService;
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
@@ -39,6 +42,9 @@ public class AuthService {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         String token = jwtUtil.generateToken(userDetails);
+
+        Long userId = ((UserDetailsImpl) userDetails).getId();
+        auditLogService.log(userId, "LOGIN", "USER", userId);
 
         return AuthResponse.builder()
                 .token(token)
@@ -71,7 +77,9 @@ public class AuthService {
                 .role(role)
                 .build();
 
-        userRepository.save(user);
+        User saved = userRepository.save(user);
+
+        auditLogService.log(saved.getId(), "REGISTER", "USER", saved.getId());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtUtil.generateToken(userDetails);

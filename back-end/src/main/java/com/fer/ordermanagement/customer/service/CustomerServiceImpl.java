@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.customer.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.common.exception.ConflictException;
 import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.customer.dto.CustomerRequest;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService{
     private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
+    private final AuditLogService auditLogService;
 
     @Override
     public CustomerResponse create(CustomerRequest req){
@@ -39,6 +41,7 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setAddress(req.getAddress());
 
         Customer saved = customerRepository.save(customer);
+        auditLogService.log("CREATE", "CUSTOMER", saved.getId());
         return CustomerMapper.toResponse(saved);
     }
 
@@ -64,6 +67,7 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setAddress(req.getAddress());
 
         customerRepository.save(customer);
+        auditLogService.log("UPDATE", "CUSTOMER", id);
         return CustomerMapper.toResponse(customer);
     }
 
@@ -95,6 +99,7 @@ public class CustomerServiceImpl implements CustomerService{
         }
 
         customerRepository.deleteById(id);
+        auditLogService.log("DELETE", "CUSTOMER", id);
     }
 
     @Override
