@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.product.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.category.entity.Category;
 import com.fer.ordermanagement.category.service.CategoryService;
 import com.fer.ordermanagement.common.exception.ConflictException;
@@ -37,6 +38,7 @@ class ProductServiceImplTest {
     @Mock private ProductRepository productRepository;
     @Mock private CategoryService categoryService;
     @Mock private InventoryService inventoryService;
+    @Mock private AuditLogService auditLogService;
 
     @InjectMocks
     private ProductServiceImpl productService;

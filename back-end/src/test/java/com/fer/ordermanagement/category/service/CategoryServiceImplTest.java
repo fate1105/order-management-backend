@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.category.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.category.dto.CategoryRequest;
 import com.fer.ordermanagement.category.dto.CategoryResponse;
 import com.fer.ordermanagement.category.entity.Category;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.*;
 class CategoryServiceImplTest {
 
     @Mock private CategoryRepository categoryRepository;
+    @Mock private AuditLogService auditLogService;
 
     @InjectMocks
     private CategoryServiceImpl categoryService;

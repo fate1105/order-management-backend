@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.auth.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.auth.dto.AuthResponse;
 import com.fer.ordermanagement.auth.dto.LoginRequest;
 import com.fer.ordermanagement.auth.dto.RegisterRequest;
@@ -40,7 +41,7 @@ class AuthServiceTest {
     @Mock private AuthenticationManager authenticationManager;
     @Mock private JwtUtil jwtUtil;
     @Mock private UserDetailsServiceImpl userDetailsService;
-
+    @Mock private AuditLogService auditLogService;
     @InjectMocks
     private AuthService authService;
 
@@ -57,12 +58,14 @@ class AuthServiceTest {
         mockRole = new Role();
         mockRole.setName(RoleName.STAFF);
 
-        // Mock UserDetails với role STAFF
-        mockUserDetails = new org.springframework.security.core.userdetails.User(
-                "admin",
-                "encodedPassword",
-                List.of(new SimpleGrantedAuthority("STAFF"))
-        );
+        User mockUser = User.builder()
+                .id(1L)
+                .username("admin")
+                .password("encodedPassword")
+                .role(mockRole)
+                .status(com.fer.ordermanagement.auth.enums.UserStatus.ACTIVE)
+                .build();
+        mockUserDetails = new com.fer.ordermanagement.auth.security.UserDetailsImpl(mockUser);
     }
 
     //LOGIN
@@ -89,7 +92,7 @@ class AuthServiceTest {
         assertNotNull(response);
         assertEquals("mock-jwt-token", response.getToken());
         assertEquals("admin", response.getUsername());
-        assertEquals("STAFF", response.getRole());
+        assertEquals("ROLE_STAFF", response.getRole());
     }
 
     //REGISTER
@@ -127,18 +130,30 @@ class AuthServiceTest {
     @Test
     @DisplayName("Register: Nên lưu user và trả về token khi dữ liệu hợp lệ")
     void register_ShouldSaveUserAndReturnToken_WhenValid() {
+        // Tạo savedUser có id
+        User savedUser = User.builder()
+                .id(1L)
+                .username("newuser")
+                .password("encodedPassword")
+                .role(mockRole)
+                .status(com.fer.ordermanagement.auth.enums.UserStatus.ACTIVE)
+                .build();
+
         when(userRepository.existsByUsername("newuser")).thenReturn(false);
         when(userRepository.existsByEmail("newuser@gmail.com")).thenReturn(false);
         when(roleRepository.findByName(RoleName.STAFF)).thenReturn(Optional.of(mockRole));
         when(passwordEncoder.encode("123456")).thenReturn("encodedPassword");
-        when(userDetailsService.loadUserByUsername("newuser")).thenReturn(mockUserDetails);
+        when(userRepository.save(any(User.class))).thenReturn(savedUser); // ← fix null
+        when(userDetailsService.loadUserByUsername("newuser")).thenReturn(
+                new com.fer.ordermanagement.auth.security.UserDetailsImpl(savedUser)
+        );
         when(jwtUtil.generateToken(any(UserDetails.class))).thenReturn("mock-jwt-token");
 
         AuthResponse response = authService.register(registerRequest);
 
         assertNotNull(response);
         assertEquals("mock-jwt-token", response.getToken());
-        assertEquals("STAFF", response.getRole());
+        assertEquals("ROLE_STAFF", response.getRole()); // ← UserDetailsImpl thêm prefix ROLE_
         verify(userRepository).save(any(User.class));
     }
 }

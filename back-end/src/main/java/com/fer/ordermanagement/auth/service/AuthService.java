@@ -86,8 +86,11 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(token)
-                .username(user.getUsername())
-                .role(role.getName().name())
+                .username(saved.getUsername())
+                .role(userDetails.getAuthorities().stream()
+                        .findFirst()
+                        .map(GrantedAuthority::getAuthority)
+                        .orElse(""))  // trả về "ROLE_STAFF"
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.fer.ordermanagement.order.service;
 
+import com.fer.ordermanagement.audit.service.AuditLogService;
 import com.fer.ordermanagement.common.exception.NotFoundException;
 import com.fer.ordermanagement.customer.entity.Customer;
 import com.fer.ordermanagement.customer.service.CustomerService;
@@ -42,6 +43,7 @@ class OrderServiceImplTest {
     @Mock private CustomerService customerService;
     @Mock private InventoryService inventoryService;
     @Mock private PaymentService paymentService;
+    @Mock private AuditLogService auditLogService;
 
     @InjectMocks
     private OrderServiceImpl orderService;
