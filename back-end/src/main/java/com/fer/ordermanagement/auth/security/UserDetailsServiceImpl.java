@@ -27,10 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new DisabledException("User is not active: " + username);
         }
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .authorities(user.getRole().getName().name())
-                .build();
+        return new UserDetailsImpl(user);
     }
 }
