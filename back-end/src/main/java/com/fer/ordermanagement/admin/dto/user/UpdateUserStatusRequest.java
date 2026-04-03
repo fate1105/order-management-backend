@@ -1,4 +1,4 @@
-package com.fer.ordermanagement.admin.dto;
+package com.fer.ordermanagement.admin.dto.user;
 
 import com.fer.ordermanagement.auth.enums.UserStatus;
 import jakarta.validation.constraints.NotNull;

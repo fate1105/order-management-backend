@@ -1,8 +1,8 @@
 package com.fer.ordermanagement.admin.controller;
 
-import com.fer.ordermanagement.admin.dto.UpdateUserRoleRequest;
-import com.fer.ordermanagement.admin.dto.UpdateUserStatusRequest;
-import com.fer.ordermanagement.admin.dto.UserResponse;
+import com.fer.ordermanagement.admin.dto.user.UpdateUserRoleRequest;
+import com.fer.ordermanagement.admin.dto.user.UpdateUserStatusRequest;
+import com.fer.ordermanagement.admin.dto.user.UserResponse;
 import com.fer.ordermanagement.admin.service.AdminUserService;
 import com.fer.ordermanagement.auth.enums.RoleName;
 import com.fer.ordermanagement.auth.enums.UserStatus;

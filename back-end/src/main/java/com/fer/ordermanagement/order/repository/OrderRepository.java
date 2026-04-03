@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,25 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             @Param("status") OrderStatus status,
             Pageable pageable
     );
+    // Doanh thu theo ngày
+    @Query("""
+    SELECT CAST(o.createdAt AS LocalDate) as date,
+           SUM(o.totalAmount) as totalRevenue,
+           COUNT(o) as totalOrders
+    FROM Order o
+    WHERE o.status = 'COMPLETED'
+      AND o.createdAt BETWEEN :start AND :end
+    GROUP BY CAST(o.createdAt AS LocalDate)
+    ORDER BY CAST(o.createdAt AS LocalDate)
+    """)
+    List<Object[]> findRevenueByDateRange(
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
 
-    boolean existsByCustomerId(Long id);
+    // Đơn hàng theo trạng thái
+    @Query("SELECT o.status, COUNT(o) FROM Order o GROUP BY o.status")
+    List<Object[]> countByStatus();
+
+    boolean existsByCustomerId(Long customerId);
 }
