@@ -1,10 +1,10 @@
 package com.fer.ordermanagement.admin.controller;
 
+import com.fer.ordermanagement.admin.controller.api.ReportApi;
 import com.fer.ordermanagement.admin.dto.report.*;
 import com.fer.ordermanagement.admin.service.ReportService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.fer.ordermanagement.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,34 +12,34 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/reports")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "Bearer Authentication")
-public class ReportController {
+public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
-    @GetMapping("/revenue")
-    public ResponseEntity<List<RevenueReportResponse>> getRevenue(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(reportService.getRevenueReport(startDate, endDate));
+    @Override
+    public ResponseEntity<BaseResponse<List<RevenueReportResponse>>> getRevenue(
+            LocalDate startDate, LocalDate endDate) {
+        return ResponseEntity.ok(BaseResponse.success(
+                reportService.getRevenueReport(startDate, endDate)));
     }
 
-    @GetMapping("/orders/status")
-    public ResponseEntity<List<OrderStatusReportResponse>> getOrderStatus() {
-        return ResponseEntity.ok(reportService.getOrderStatusReport());
+    @Override
+    public ResponseEntity<BaseResponse<List<OrderStatusReportResponse>>> getOrderStatus() {
+        return ResponseEntity.ok(BaseResponse.success(
+                reportService.getOrderStatusReport()));
     }
 
-    @GetMapping("/products/top")
-    public ResponseEntity<List<TopProductReportResponse>> getTopProducts(
-            @RequestParam(defaultValue = "10") int limit) {
-        return ResponseEntity.ok(reportService.getTopProducts(limit));
+    @Override
+    public ResponseEntity<BaseResponse<List<TopProductReportResponse>>> getTopProducts(int limit) {
+        return ResponseEntity.ok(BaseResponse.success(
+                reportService.getTopProducts(limit)));
     }
 
-    @GetMapping("/customers/{customerId}/orders")
-    public ResponseEntity<List<CustomerOrderHistoryResponse>> getCustomerHistory(
-            @PathVariable Long customerId) {
-        return ResponseEntity.ok(reportService.getCustomerOrderHistory(customerId));
+    @Override
+    public ResponseEntity<BaseResponse<List<CustomerOrderHistoryResponse>>> getCustomerHistory(
+            Long customerId) {
+        return ResponseEntity.ok(BaseResponse.success(
+                reportService.getCustomerOrderHistory(customerId)));
     }
 }
