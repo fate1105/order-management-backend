@@ -10,6 +10,7 @@ import com.fer.ordermanagement.common.exception.ConflictException;
 import com.fer.ordermanagement.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,12 +57,14 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @Cacheable(value = "categories", key = "#id")
     public CategoryResponse getById(Long id){
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found:" + id));
         return CategoryMapper.toResponse(category);
     }
 
+    @Cacheable(value = "categories")
     @Override
     public List<CategoryResponse> getAll(){
         return categoryRepository.findAll()

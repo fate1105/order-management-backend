@@ -18,6 +18,7 @@ import com.fer.ordermanagement.product.entity.Product;
 import com.fer.ordermanagement.product.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,6 +77,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(value = "orders", key = "#orderId")
     public OrderResponse getById(Long orderId) {
         Order order = orderRepository.findByIdWithItems(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found: " + orderId));
@@ -101,6 +103,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(value = "orders", key = "'customer_' + #customerId")
     public List<OrderResponse> getOrdersByCustomerId(Long customerId) {
         customerService.getCustomerEntityById(customerId);
 

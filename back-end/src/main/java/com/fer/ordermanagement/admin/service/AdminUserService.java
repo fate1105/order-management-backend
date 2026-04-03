@@ -11,6 +11,7 @@ import com.fer.ordermanagement.auth.enums.UserStatus;
 import com.fer.ordermanagement.auth.repository.RoleRepository;
 import com.fer.ordermanagement.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ public class AdminUserService {
         return userRepository.findAll(pageable).map(this::toResponse);
     }
 
+    @Cacheable(value = "users", key = "#id")
     public UserResponse getUserById(Long id) {
         return toResponse(findUser(id));
     }

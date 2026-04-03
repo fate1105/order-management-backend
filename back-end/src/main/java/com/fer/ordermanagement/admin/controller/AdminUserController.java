@@ -7,6 +7,7 @@ import com.fer.ordermanagement.admin.service.AdminUserService;
 import com.fer.ordermanagement.auth.enums.RoleName;
 import com.fer.ordermanagement.auth.enums.UserStatus;
 import com.fer.ordermanagement.auth.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class AdminUserController {
 
     private final AdminUserService adminUserService;

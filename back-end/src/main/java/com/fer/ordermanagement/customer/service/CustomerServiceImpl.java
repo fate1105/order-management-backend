@@ -11,6 +11,7 @@ import com.fer.ordermanagement.customer.repository.CustomerRepository;
 import com.fer.ordermanagement.order.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -72,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    @Cacheable(value = "customers", key = "#id")
     public CustomerResponse getById(Long id) {
 
         Customer customer = customerRepository.findById(id)
@@ -81,6 +83,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    @Cacheable(value = "customers", key = "#customerId")
     public Customer getCustomerEntityById(Long customerId) {
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException("Customer not found: " + customerId));

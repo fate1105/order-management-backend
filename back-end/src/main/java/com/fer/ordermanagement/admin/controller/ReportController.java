@@ -2,6 +2,7 @@ package com.fer.ordermanagement.admin.controller;
 
 import com.fer.ordermanagement.admin.dto.report.*;
 import com.fer.ordermanagement.admin.service.ReportService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/reports")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ReportController {
 
     private final ReportService reportService;

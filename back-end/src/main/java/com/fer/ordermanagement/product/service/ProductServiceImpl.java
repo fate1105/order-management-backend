@@ -15,6 +15,7 @@ import com.fer.ordermanagement.product.mapper.ProductMapper;
 import com.fer.ordermanagement.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -79,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#id")
     public ProductResponse getById(Long id) {
         Product p = productRepository.findByIdWithCategory(id)
                 .orElseThrow(() -> new NotFoundException("Product not found: " + id));
@@ -86,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#productIds.toString()")
     public List<Product> getProductsByIds(List<Long> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return Collections.emptyList();
